@@ -1,0 +1,56 @@
+#! /usr/bin/vvp
+:ivl_version "10.1 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 1;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x5623f42db3a0 .scope module, "and2_tb" "and2_tb" 2 6;
+ .timescale 0 -1;
+v0x5623f42fb980_0 .var "a", 0 0;
+v0x5623f42fba50_0 .var "b", 0 0;
+v0x5623f42fbb20_0 .net "y", 0 0, L_0x5623f42fbc20;  1 drivers
+S_0x5623f42db520 .scope module, "aandb" "and2" 2 11, 3 1 0, S_0x5623f42db3a0;
+ .timescale 0 -1;
+    .port_info 0 /INPUT 1 "a"
+    .port_info 1 /INPUT 1 "b"
+    .port_info 2 /OUTPUT 1 "out"
+L_0x5623f42fbc20 .functor AND 1, v0x5623f42fb980_0, v0x5623f42fba50_0, C4<1>, C4<1>;
+v0x5623f42db740_0 .net "a", 0 0, v0x5623f42fb980_0;  1 drivers
+v0x5623f42fb7a0_0 .net "b", 0 0, v0x5623f42fba50_0;  1 drivers
+v0x5623f42fb860_0 .net "out", 0 0, L_0x5623f42fbc20;  alias, 1 drivers
+    .scope S_0x5623f42db3a0;
+T_0 ;
+    %vpi_call 2 15 "$monitor", "a=%b, b=%b, y=%b", v0x5623f42fb980_0, v0x5623f42fba50_0, v0x5623f42fbb20_0 {0 0 0};
+    %vpi_call 2 16 "$dumpfile", "and2.vcd" {0 0 0};
+    %vpi_call 2 17 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x5623f42db3a0 {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5623f42fb980_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5623f42fba50_0, 0, 1;
+    %delay 100, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5623f42fb980_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5623f42fba50_0, 0, 1;
+    %delay 100, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5623f42fb980_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x5623f42fba50_0, 0, 1;
+    %delay 100, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5623f42fb980_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x5623f42fba50_0, 0, 1;
+    %delay 100, 0;
+    %vpi_call 2 22 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "and2_tb.v";
+    "./and2.v";

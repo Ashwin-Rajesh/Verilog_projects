@@ -1,0 +1,51 @@
+$date
+	Tue Oct 13 19:14:50 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module dff_tb $end
+$var wire 1 ! qbar $end
+$var wire 1 " q $end
+$var reg 1 # clk $end
+$var reg 1 $ d $end
+$scope module flipflop $end
+$var wire 1 # clk $end
+$var wire 1 $ d $end
+$var reg 1 " q $end
+$var reg 1 ! qbar $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0$
+0#
+x"
+x!
+$end
+#5
+1#
+#7
+0"
+#8
+1$
+#9
+0!
+#10
+0#
+#15
+1#
+#17
+1"
+#18
+0$
+#19
+1!
+#20
+0#
+#25
+1#

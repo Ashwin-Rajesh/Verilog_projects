@@ -1,0 +1,35 @@
+$date
+	Tue Oct 13 20:52:52 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	100ms
+$end
+$scope module and2_tb $end
+$var wire 1 ! y $end
+$var reg 1 " a $end
+$var reg 1 # b $end
+$scope module aandb $end
+$var wire 1 " a $end
+$var wire 1 # b $end
+$var wire 1 ! out $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0#
+0"
+0!
+$end
+#100
+1#
+#200
+0#
+1"
+#300
+1!
+1#
+#400
