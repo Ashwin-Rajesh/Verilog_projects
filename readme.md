@@ -271,6 +271,25 @@ defparam
 
 ---
 
+## Scalars, Vectors
+
+- In verilog, scalars are 1-bit wide data types, like a simple ```reg``` or ```wire```. 
+- We can define buses using vectors. They are defined as follows :
+
+```verilog
+wire[7:0] bus1;   // 8-bit wide little-endian bus
+wire[0:7] bus2;   // 8-bit wide big-endian bus
+```
+
+- The indexing can be either from high:low (little endian) or low:high (big endian).
+- Slices of the vectors can be taken as follows:
+
+```verilog
+bus1[6:3] = 4'ha;   // Bits 5 to 3 (both inclusive) become 1010
+```
+
+---
+
 ## References
 
 1. [Summary of verilog syntax](http://www.iitg.ac.in/hemangee/cs224_2020/verilog2.pdf)
