@@ -302,7 +302,11 @@ Like in ```#``` directives in c, there are compiler directives in verilog, which
   - Used to discard macros defined using ``` `define```
 - ``` `ifdef```
   - Used to define areas of code that should be included if some macro has been defined. The area to be checked will be receeded by the ``` `ifdef``` tag and succeeded by the ``` `endif``` tag, similar to ```#ifdef``` and ```#endif``` tags.
-  - 
+  - Some directives related to this are
+    - ``` `endif```
+    - ``` `else```
+    - ``` `ifndef```
+    - ``` `elseif```
 
 ---
 
