@@ -127,7 +127,7 @@ module test_module(
     output port3,
     ...
     inout portx
-)
+);
     // Doing stuff
     ...
 endmodule
@@ -287,6 +287,22 @@ wire[0:7] bus2;   // 8-bit wide big-endian bus
 ```verilog
 bus1[6:3] = 4'ha;   // Bits 5 to 3 (both inclusive) become 1010
 ```
+
+---
+
+## Compiler directives
+
+Like in ```#``` directives in c, there are compiler directives in verilog, which are preceeded by ``` ` ```. Some compiler directives are
+
+- ``` `include```
+  - Similar to #include in c, used for inserting contents of another verilog file
+- ``` `define```
+  - Similar to c, used for defining macros
+- ``` `undef```
+  - Used to discard macros defined using ``` `define```
+- ``` `ifdef```
+  - Used to define areas of code that should be included if some macro has been defined. The area to be checked will be receeded by the ``` `ifdef``` tag and succeeded by the ``` `endif``` tag, similar to ```#ifdef``` and ```#endif``` tags.
+  - 
 
 ---
 
