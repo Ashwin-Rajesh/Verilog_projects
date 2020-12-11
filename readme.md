@@ -341,6 +341,31 @@ out = test_task(inp);
 
 ---
 
+## System tasks
+
+System tasks are built-in tasks. All system tasks are preceeded with ```$```
+
+### Printing to screen
+- ```$display``` : Displays passed arguemnts to console
+- ```$strobe``` : Same as ```$display```, but the values are all printed only after simulation
+- ```$monitor``` : Displays every time one of its parameters changes.
+```verilog
+$display ("format_string", par_1, par_2, ... );
+$strobe ("format_string", par_1, par_2, ... );
+$monitor ("format_string", par_1, par_2, ... );
+```
+- The format string used here is similar to other languages and can have the format characters :
+  - ```%d``` : Decimal
+  - ```%h``` : Hexadecimal
+  - ```%b``` : Binary
+  - ```%c``` : Character
+  - ```%s``` : String
+  - ```%t``` : Time
+  - ```%m``` : Hierarchy level
+  - As usual, we can specify number of spaces (eg : %5d)
+
+---
+
 ## Compiler directives
 
 Like in ```#``` directives in c, there are compiler directives in verilog, which are preceeded by ``` ` ```. Some compiler directives are
@@ -352,7 +377,7 @@ Like in ```#``` directives in c, there are compiler directives in verilog, which
 - ``` `undef```
   - Used to discard macros defined using ``` `define```
 - ``` `ifdef```
-  - Used to define areas of code that should be included if some macro has been defined. The area to be checked will be receeded by the ``` `ifdef``` tag and succeeded by the ``` `endif``` tag, similar to ```#ifdef``` and ```#endif``` tags.
+  - Used to define areas of code that should be included if some macro has been defined. The area to be checked will be preceeded by the ``` `ifdef``` tag and succeeded by the ``` `endif``` tag, similar to ```#ifdef``` and ```#endif``` tags.
   - Some directives related to this are
     - ``` `endif```
     - ``` `else```
@@ -366,3 +391,4 @@ Like in ```#``` directives in c, there are compiler directives in verilog, which
 1. [Summary of verilog syntax](http://www.iitg.ac.in/hemangee/cs224_2020/verilog2.pdf)
 2. [asicworld.com verilog tutorial](http://www.asic-world.com/verilog/veritut.html)
 3. [chipverify.com verilog tutorial](https://www.chipverify.com/verilog/verilog-tutorial)
+4. [nptel course playlist on youtube - IIT KGP](https://www.youtube.com/playlist?list=PLUtfVcb-iqn-EkuBs3arreilxa2UKIChl)
