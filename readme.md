@@ -290,6 +290,57 @@ bus1[6:3] = 4'ha;   // Bits 5 to 3 (both inclusive) become 1010
 
 ---
 
+## Tasks and Functions
+
+Tasks and functions are similar to procedures and functions in c. They are defined inside modules.
+
+### Tasks
+- Can have multiple arguments of type
+  - input
+  - output
+  - inout
+- Does not return anything
+- Tasks are defined as follows:
+```verilog
+// Defining a task
+task test_task;
+  input [3:0] businp;
+  output out;
+
+  // Body of task
+  begin
+  ...
+  end
+endtask
+```
+- Tasks can be instantiated as follows:
+```verilog
+test_task(inp, out);
+```
+
+### Functions
+- Should have at least one input type argument
+- Cannot have output type arguments
+- Return a single value
+- They are defined as follows:
+```verilog
+function [3:0] test_func;
+  input [1:0] businp;
+  
+  // Body of function
+  begin
+  ...
+  my_func = ...; // Return value
+  end
+endfunction
+```
+- Functions are instantiated as follows:
+```verilog
+out = test_task(inp);
+```
+
+---
+
 ## Compiler directives
 
 Like in ```#``` directives in c, there are compiler directives in verilog, which are preceeded by ``` ` ```. Some compiler directives are
