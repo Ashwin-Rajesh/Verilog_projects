@@ -319,6 +319,7 @@ test_task(inp, out);
 ```
 
 ### Functions
+
 - Should have at least one input type argument
 - Cannot have output type arguments
 - Return a single value
@@ -346,15 +347,18 @@ out = test_task(inp);
 System tasks are built-in tasks. All system tasks are preceeded with ```$```
 
 ### Printing to screen
+
 - ```$display``` : Displays passed arguemnts to console
-- ```$strobe``` : Same as ```$display```, but the values are all printed only after simulation
+- ```$strobe``` : Same as ```$display```, but the values are all printed only at the end of current timestep instead of instantly
 - ```$monitor``` : Displays every time one of its parameters changes.
+
 ```verilog
 $display ("format_string", par_1, par_2, ... );
 $strobe ("format_string", par_1, par_2, ... );
 $monitor ("format_string", par_1, par_2, ... );
 ```
-- The format string used here is similar to other languages and can have the format characters :
+
+- The format string used here is similar to that in normal programming languages and can have the format characters :
   - ```%d``` : Decimal
   - ```%h``` : Hexadecimal
   - ```%b``` : Binary
@@ -363,6 +367,179 @@ $monitor ("format_string", par_1, par_2, ... );
   - ```%t``` : Time
   - ```%m``` : Hierarchy level
   - As usual, we can specify number of spaces (eg : %5d)
+
+### Time
+
+- ```$time``` : Returns time as 64-bit integer
+- ```$stime``` : Returns time ass 32-bit integer
+- ```$realtime``` : Returns time as real number
+
+### Simulation control
+
+- ```$reset``` : Resets time to 0
+- ```$stop``` : Stops simulation and puts it in ```interactive mode```
+- ```$finish``` : Exits the simulator
+
+### Dumping to file
+
+- These can dump variable changes to a simulation viewer like GTKWave.
+
+- ```$dumpfile("filename")``` : Sets the file name to dump values into
+- ```$dumpvar(n, module)``` : Dumps variables in module instantiated with name ```module``` and n levels below
+- ```$dumpon``` : Initiates dump
+- ```$dumpoff``` : Stops dump
+
+---
+
+## Operators
+
+- Operators in verilog are almost identical to those used in C. They operate on data. The types are:
+
+### Arithmetic
+
+- They are used to carry out arithmetics on operands. They can be ```unary``` or ```binary```. ```unary``` operators have a single operand and ```binary``` have 2 operands.
+- Unary operators are
+  - ```+``` (plus sign)
+  - ```-``` (minus sign)
+- Binary operators are
+  - ```+``` (add)
+  - ```-``` (subtract)
+  - ```*``` (multiply)
+  - ```/``` (divide)
+  - ```%``` (modulus)
+  - ```**``` (exponentiation)
+
+### Bitwise
+
+- Bitwise binary operations. Input and output size are the same
+- Unary
+  - ```~``` (negation)
+- Binary
+  - ```|``` (or)
+  - ```&``` (and)
+  - ```^``` (xor)
+  - ```~^``` (xnor)
+  
+### Reduction
+
+- Input is a unary operant of multiple bits and output is a single bit. (eg. to find 8-bit AND of 8 bits in a register)
+- Unary
+  - ```&``` (and)
+  - ```~&``` (nand)
+  - ```|``` (or)
+  - ```~|``` (nor)
+  - ```^``` (xor)
+  - ```~^``` (xnor)
+  ```verilog
+  &(4'b0111);   // 0 (0 and 1 and 1 and 1)
+  &(4'b1111);   // 1 (1 and 1 and 1 and 1)
+  ```
+
+### Relational
+
+- Used to compare values, and results in a single bit (0 or 1)
+- Binary
+  - ```<``` (less than)
+  - ```>``` (greater than)
+  - ```<=``` (less than or equal to)
+  - ```>=``` (greater than or equal to)
+  - ```===``` (equal to, including ```x``` and ```z``` states)
+  - ```!==``` (not equal to, including ```x``` and ```z```)
+  - ```==``` (equal to, excluding ```x``` and ```z```)
+  - ```!=``` (equal to, excluding ```x``` and ```z```)
+
+### Logical
+
+- These give output as a single bit (0 or 1). They are **not** bitwise operators
+- Unary
+  - ```!``` (not)
+- Binary
+  - ```&&``` (and)
+  - ```||``` (or)
+
+### Shifting
+
+- There are logical and arithmetic shift. Arithmetic right shift fills the additional bits with ```1``` if the number was singed and first bit was ```1```, whereas logical shift will always fill them with ```0```.
+- Binary
+  - ```<< shift_amnt``` Logical left shift
+  - ```>> shift_amnt``` Logical right shift
+  - ```<<< shift_amnt``` Arithmetic left shift
+  - ```>>> shift_amnt``` Arithmetic right shift
+
+  ```verilog
+  8'b11111110  >>>2;    // 00111111
+  8'b01111111  >>>2;    // 00011111
+  8'b11111110  <<<2;    // 11111000
+  8'b01111111  <<<2;    // 11111100
+
+  8'sb11111110 >>>2;    // 11111111
+  8'sb01111111 >>>2;    // 00011111
+  8'sb11111110 <<<2;    // 11111000
+  8'sb01111111 <<<2;    // 11111100
+  ```
+
+### Assignment
+
+- Assign values
+- Binary
+  - ```=``` Blocking assignment - is evaluated and assigned immediately
+  - ```<=``` Non-blocking assignment - rhs is evaluated immediately but lhs is assigned only after current timestep
+
+  ```verilog
+  // Swap upper, lower 8 bytes
+  always @(posedge clk)
+  {
+    begin
+      word[15:8] = word[7:0];
+      word[7:0]  = word[15:8];
+    end
+  }
+  ```
+  This will not work since the statements are evaluated and assigned line-by-line
+
+  ```verilog
+  // Swap upper, lower 8 bytes
+  always @(posedge clk)
+  {
+    begin
+      word[15:8] <= word[7:0];
+      word[7:0]  <= word[15:8];
+    end
+  }
+  ```
+  This will work since the statements are non-blocking and are assigned only after current time step.
+
+### Others
+
+- ```{a,b,..c}```
+  - Concatenation
+  - Concatenation can also be in lhs
+  ```verilog
+  {2'b11, 3'b010};    // 11010
+
+  {cout, sum} = a + b + cin;    // For an adder
+  ```
+
+- ```{m{n}}```
+  - Replication operator
+  - Is equivalent to {n, n, ... n} (concatenation m times)
+
+  ```verilog
+  {4{2'b10}};         // 10101010
+  ```
+
+- ```a ? b : c;```
+  - Conditional operator
+  - Similar to conditional operator in C
+
+- ```[n]```
+  - Bit selection
+
+- ```[m:n]```
+  - Slicing
+
+- Using reg or wire with ```x``` or ```z``` will lead to whole result being ```x```.
+
 
 ---
 
@@ -392,3 +569,4 @@ Like in ```#``` directives in c, there are compiler directives in verilog, which
 2. [asicworld.com verilog tutorial](http://www.asic-world.com/verilog/veritut.html)
 3. [chipverify.com verilog tutorial](https://www.chipverify.com/verilog/verilog-tutorial)
 4. [nptel course playlist on youtube - IIT KGP](https://www.youtube.com/playlist?list=PLUtfVcb-iqn-EkuBs3arreilxa2UKIChl)
+5. [fpga4fun for projects and examples](https://www.fpga4fun.com/)
