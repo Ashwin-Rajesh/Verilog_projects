@@ -4,7 +4,7 @@ Documenting various beginner projects, syntax and common paradigms of verilog HD
 
 - Ubuntu 18.04
 - Icarus verilog for compilation
-  - [Version 10.1](ftp://ftp.icarus.com/pub/eda/verilog/v10/)
+  - [Version 12.0](ftp://ftp.icarus.com/pub/eda/verilog/v10/)
 - Visual studio code for editing
   - [Verilog-HDL extension](https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL)
 - gtkwave for visualising waveforms
@@ -233,22 +233,22 @@ defparam
 - The last 2 are only for physical data types
 - Literals are defined in the following formats
 
-```verilog
-// <width>'<sign><radix><value>
-4'b1000     // 4-bit unsigned binary 1000     : 1000
-4'd15       // 4-bit unsigned decimal 15      : 1000 
-8'd32       // 8-bit unsigned decimal 32      : 00100000
-8'sd32      // 8-bit signed decimal 32        : 00100000
-8'b10x      // 8-bit unsigned binary 10x      : 0000010x
+  ```verilog
+  // <width>'<sign><radix><value>
+  4'b1000     // 4-bit unsigned binary 1000     : 1000
+  4'd15       // 4-bit unsigned decimal 15      : 1000 
+  8'd32       // 8-bit unsigned decimal 32      : 00100000
+  8'sd32      // 8-bit signed decimal 32        : 00100000
+  8'b10x      // 8-bit unsigned binary 10x      : 0000010x
 
-// '<radix><value>
-'b10        // Unsigned Binary 10             : 10
-'hf0        // Unsigned Hexadecimal f0        : 11110000
-'o77        // Unsigned Octal 77              : 111111
-'sb110      // Signed Binary 110              : 110       (sign extension with 1s)
-'b110       // Unsigned Binary 110            : 110       (sign extension with 0s)
+  // '<radix><value>
+  'b10        // Unsigned Binary 10             : 10
+  'hf0        // Unsigned Hexadecimal f0        : 11110000
+  'o77        // Unsigned Octal 77              : 111111
+  'sb110      // Signed Binary 110              : 110       (sign extension with 1s)
+  'b110       // Unsigned Binary 110            : 110       (sign extension with 0s)
 
-```
+  ```
 
 - The letters for sign and radix are __not__ case sensitive.
 
@@ -274,19 +274,21 @@ defparam
 ## Scalars, Vectors
 
 - In verilog, scalars are 1-bit wide data types, like a simple ```reg``` or ```wire```. 
+
 - We can define buses using vectors. They are defined as follows :
 
-```verilog
-wire[7:0] bus1;   // 8-bit wide little-endian bus
-wire[0:7] bus2;   // 8-bit wide big-endian bus
-```
+  ```verilog
+  wire[7:0] bus1;   // 8-bit wide little-endian bus
+  wire[0:7] bus2;   // 8-bit wide big-endian bus
+  ```
 
 - The indexing can be either from high:low (little endian) or low:high (big endian).
+
 - Slices of the vectors can be taken as follows:
 
-```verilog
-bus1[6:3] = 4'ha;   // Bits 5 to 3 (both inclusive) become 1010
-```
+  ```verilog
+  bus1[6:3] = 4'ha;   // Bits 5 to 3 (both inclusive) become 1010
+  ```
 
 ---
 
@@ -301,22 +303,23 @@ Tasks and functions are similar to procedures and functions in c. They are defin
   - inout
 - Does not return anything
 - Tasks are defined as follows:
-```verilog
-// Defining a task
-task test_task;
-  input [3:0] businp;
-  output out;
+  ```verilog
+  // Defining a task
+  task test_task;
+    input [3:0] businp;
+    output out;
 
-  // Body of task
-  begin
-  ...
-  end
-endtask
-```
+    // Body of task
+    begin
+    ...
+    end
+  endtask
+  ```
+
 - Tasks can be instantiated as follows:
-```verilog
-test_task(inp, out);
-```
+  ```verilog
+  test_task(inp, out);
+  ```
 
 ### Functions
 
@@ -324,21 +327,22 @@ test_task(inp, out);
 - Cannot have output type arguments
 - Return a single value
 - They are defined as follows:
-```verilog
-function [3:0] test_func;
-  input [1:0] businp;
-  
-  // Body of function
-  begin
-  ...
-  my_func = ...; // Return value
-  end
-endfunction
-```
+  ```verilog
+  function [3:0] test_func;
+    input [1:0] businp;
+    
+    // Body of function
+    begin
+    ...
+    test_func = ...; // Return value
+    end
+  endfunction
+  ```
+
 - Functions are instantiated as follows:
-```verilog
-out = test_task(inp);
-```
+  ```verilog
+  out = test_task(inp);
+  ```
 
 ---
 
@@ -352,11 +356,11 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
 - ```$strobe``` : Same as ```$display```, but the values are all printed only at the end of current timestep instead of instantly
 - ```$monitor``` : Displays every time one of its parameters changes.
 
-```verilog
-$display ("format_string", par_1, par_2, ... );
-$strobe ("format_string", par_1, par_2, ... );
-$monitor ("format_string", par_1, par_2, ... );
-```
+  ```verilog
+  $display ("format_string", par_1, par_2, ... );
+  $strobe ("format_string", par_1, par_2, ... );
+  $monitor ("format_string", par_1, par_2, ... );
+  ```
 
 - The format string used here is similar to that in normal programming languages and can have the format characters :
   - ```%d``` : Decimal
@@ -467,15 +471,17 @@ $monitor ("format_string", par_1, par_2, ... );
   - ```>>> shift_amnt``` Arithmetic right shift
 
   ```verilog
-  8'b11111110  >>>2;    // 00111111
-  8'b01111111  >>>2;    // 00011111
-  8'b11111110  <<<2;    // 11111000
-  8'b01111111  <<<2;    // 11111100
+  // Arithmetic shifting example
 
-  8'sb11111110 >>>2;    // 11111111
-  8'sb01111111 >>>2;    // 00011111
-  8'sb11111110 <<<2;    // 11111000
-  8'sb01111111 <<<2;    // 11111100
+  8'b11111110  >>> 2;    // 00111111
+  8'b01111111  >>> 2;    // 00011111
+  8'b11111110  <<< 2;    // 11111000
+  8'b01111111  <<< 2;    // 11111100
+
+  8'sb11111110 >>> 2;    // 11111111
+  8'sb01111111 >>> 2;    // 00011111
+  8'sb11111110 <<< 2;    // 11111000
+  8'sb01111111 <<< 2;    // 11111100
   ```
 
 ### Assignment
@@ -528,9 +534,10 @@ $monitor ("format_string", par_1, par_2, ... );
   {4{2'b10}};         // 10101010
   ```
 
-- ```a ? b : c;```
+- ```a?b:c```
   - Conditional operator
   - Similar to conditional operator in C
+  - if(a) b else c
 
 - ```[n]```
   - Bit selection
@@ -539,6 +546,86 @@ $monitor ("format_string", par_1, par_2, ... );
   - Slicing
 
 - Using reg or wire with ```x``` or ```z``` will lead to whole result being ```x```.
+
+---
+
+## Assignments
+
+### Continuous assignments
+
+- For continously assigning values to a net. Only net type variables can be assigned. Reg type variables cannot be assigned.
+- Assignments happen outside procedural blocks, in assign statements.
+
+  ```verilog
+  // Format
+  assign #delay <net_expression> = <expression>;
+  
+  // Example - a 10-bit adder
+  wire cout;
+  wire[10:0] sum;
+
+  assign #5 {cout, sum} = in1 + in2 + cin;
+  ```
+
+- The delat is said to be ```inertial```, because if there is are 2 changes within the specified delay, only the 2nd change is considered. The first change is discarded.
+
+### Procedural assignments
+
+- Assignment is done only when control is transferred to it. This is used for reg type variables.
+- Assignments occur inside procedural blocks (```always```, ```initial```).
+
+- ```initial``` block
+  - Executes once and becomes inactive after that
+  - There can be multiple initial blocks that all start at time 0
+
+- ```always``` bock
+  - always statement continuously repeats itself throughout the simulation. 
+  - If there are
+multiple always statements, they all start to execute concurrently at time 0. 
+  - May be triggered by events using an event recognizing list @( ).
+
+- Blocking and non-blocking assignments become relevant here
+- Blocking assinments wait for other blocking assignments of the same time and are executed sequentially.
+  ```register = expression;```
+- Non-blocking assignments do not wait for other non-blocking assignments of the same time. They are all executed concurrently. ```register <= expression;```
+- There can be intra-assignment delay (immediate evaluation, delayed assignment) ```register = #delay expression;```
+
+### Quasi-continuous assignments
+
+- LHS must be reg type, and assignment inside procedural blocks.
+- We can assign registers to be continously assigned. After doing this, normal procedural assignments on the registers is useless.
+- Doing another quasi-continous assignment overrides previous assignment.
+- We need to use ```deassign``` statement to de-assign before we can use procedural assignments again. 
+
+  ```verilog
+  begin
+    ...
+    assign register = expression1;  // Activate quasi-continuous
+    ...
+    register = expression2;         // No effect
+    ...
+    assign register = expression3;  // Overrides previous quasi-continuous
+    ...
+    deassign register;              // Disable quasi-continuous
+    ...
+    register = expression4;         // Executed.
+    ...
+  end
+  ```
+
+- There cannot be delays. Only initialisation can be delayed.
+
+---
+
+## Blocks
+
+- Sequential blocks
+  - ```begin``` and ```end```
+  - Statements are executed line-by-line
+
+- Parallel blocks
+  - ```fork``` and ```join```
+  - Statements are all executed at the same time. Order is irrelevant
 
 
 ---
