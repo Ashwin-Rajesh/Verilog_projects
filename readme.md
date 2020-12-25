@@ -256,6 +256,7 @@ defparam
   - Does not change the bit pattern being converted, only affects its interpretation. [A stack overflow question on this topic](https://stackoverflow.com/questions/42911923/why-have-negative-valued-signed-literals)
   - For signed representation, use s. Else, dont use s.
   - Changes end result when the size is not specified and sign extension is required
+  - Changes the effect of arithmetic right shift operator
   ```verilog
   integer a;
 
