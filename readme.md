@@ -583,6 +583,7 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
   - If there are
 multiple always statements, they all start to execute concurrently at time 0. 
   - May be triggered by events using an event recognizing list @( ).
+- ```always``` and ```initial``` statements can only execute a single statement. Use ```begin .... end``` blocks for multiple statements.
 
 - Blocking and non-blocking assignments become relevant here
 - Blocking assinments wait for other blocking assignments of the same time and are executed sequentially.
@@ -626,6 +627,86 @@ multiple always statements, they all start to execute concurrently at time 0.
 - Parallel blocks
   - ```fork``` and ```join```
   - Statements are all executed at the same time. Order is irrelevant
+
+---
+
+## Timing control
+
+### Delay-baseed
+
+- ```#``` is used to specify delays.
+- ```#delay statement;``` will have the statement executed after delay of ```delay``` periods.
+- Intra-assignment delay can be used in procedural assignments.
+  - ``` register = #delay expression;```
+
+### Event-based
+
+- ```@()``` is used to trigger using signal changes
+- ```@(signal) statement;``` will wait for signal to change and if when ther is a change, executes statement.
+- ```always @(signal)``` can be used to run procedural statements whenever there is a change in signal.
+- ```@(posedge signal)``` triggers at the positive edge of signal.
+- ```@(negedge signal)``` triggers at the negative edge of the signal.
+- Multiple events can be used to trigger by using ```or```
+  ```verilog
+  always @(posedge clk or reset or my_event)
+    $display("hello");
+  ```
+
+### Named event
+
+- Define an event using
+- ```event my_event```
+- Then, we can use the event as ```@(my_event)```  for timing.
+- Call the event using ```-> my_event```
+
+---
+
+## Conditional and loop statements
+
+- ```if-else```
+  ```verilog
+  if ( expr )       statement;
+  else if ( expr )  statement;
+  else if ( expr )  statement;
+  else              statement;
+  ```
+
+- ```case```
+  ```verilog
+  case ( expr )
+    value1        : statement;
+    value2        : statement;
+    value3        : statement;
+    ...
+    default       : statement;
+  endcase
+  ```
+
+- ```while```
+  ```verilog
+  while ( expr )
+    statement;
+  ```
+
+- ```loop```
+  ```verilog
+  for ( init ; expr ; step)
+    statement;
+  ```
+
+- ```repeat```
+  ```verilog
+  repeat ( no_of_times )
+    statement;
+  ```
+
+- ```forever```
+  ```verilog
+  forever
+    statement;
+  ```
+
+- They all use single statements. To execcute multiple statements sequentially, use ```begin ... end``` blocks.
 
 
 ---
