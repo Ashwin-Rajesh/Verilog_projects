@@ -1,13 +1,17 @@
+# Name of project
+proj_name 	= and2
+
 # Source files used
-source 		= and2.v
+source 		= $(proj_name).v
+
 # Testbench code
-testbench	= and2_tb.v
+testbench	= $(proj_name)_tb.v
 
 # Result of compilation
-object		= and2.out
+object		= $(proj_name).out
 
 # Waveform file
-wave		= and2.vcd
+wave		= $(proj_name).vcd
 
 compile: $(object)
 .PHONY: compile

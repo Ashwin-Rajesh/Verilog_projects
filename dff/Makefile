@@ -1,12 +1,31 @@
-dff.out: dff.v dff_tb.v
-	iverilog dff_tb.v -o dff.out
+# Name of project
+proj_name 	= dff
 
-dff.vcd: dff.out
-	./dff.out
+# Source files used
+source 		= $(proj_name).v
 
-simulate: dff.vcd
-	gtkwave dff.vcd
+# Testbench code
+testbench	= $(proj_name)_tb.v
+
+# Result of compilation
+object		= $(proj_name).out
+
+# Waveform file
+wave		= $(proj_name).vcd
+
+compile: $(object)
+.PHONY: compile
+
+$(object): $(source) $(testbench)
+	iverilog $(testbench) -o $(object)
+
+$(wave): $(object)
+	./$(object)
+
+simulate: $(wave)
+	gtkwave $(wave)
 .PHONY: simulate
 
-compile: dff.out
-.PHONY: compile
+run: $(object)
+	./$(object)
+.PHONY:run

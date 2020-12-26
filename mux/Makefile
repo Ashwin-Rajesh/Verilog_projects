@@ -1,4 +1,4 @@
-source 	= mux.v mux_tb.v
+source 	= mux_struct.v mux_tb.v
 
 object  = mux.out
 

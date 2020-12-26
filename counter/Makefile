@@ -1,13 +1,17 @@
+# Name of project
+proj_name 	= counter
+
 # Source files used
-source 		= counter.v
+source 		= $(proj_name).v
+
 # Testbench code
-testbench	= counter_tb.v
+testbench	= $(proj_name)_tb.v
 
 # Result of compilation
-object		= counter.out
+object		= $(proj_name).out
 
 # Waveform file
-wave		= counter.vcd
+wave		= $(proj_name).vcd
 
 compile: $(object)
 .PHONY: compile
