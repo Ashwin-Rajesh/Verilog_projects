@@ -373,6 +373,11 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
   - ```%m``` : Hierarchy level
   - As usual, we can specify number of spaces (eg : %5d)
 
+### Random
+- ```$random``` : Generates signed 32-bit integers
+- ```$urandom``` : Generates unsigned 32-bit integers
+- ```$urandom_range(a, b)``` : Generates an unsigned integer within a speicified range
+
 ### Time
 
 - ```$time``` : Returns time as 64-bit integer
@@ -559,7 +564,7 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
 
   ```verilog
   // Format
-  assign #delay <net_expression> = <expression>;
+  assign #delay <net_expression> = <expression>;Assignment
   
   // Example - a 10-bit adder
   wire cout;
@@ -729,6 +734,54 @@ Like in ```#``` directives in c, there are compiler directives in verilog, which
     - ``` `else```
     - ``` `ifndef```
     - ``` `elseif```
+
+---
+
+## Synthesis rules
+
+Some rules of thumb to see how behavioral statements are usually synthesised.
+- ```assign``` statements generally generates combinational logic. However, sequential logic can be formed sismilar to how gates can be used to form sequential building blocks.
+- Conditional statements generate n-bit wide 2-to-1 multiplexers.
+- Variable indexing on the right produces a multiplexer.
+- Variable indexing on the left produces a demultiplexer.
+  ```verilog
+  // n-bit wide 2-to-1 mux
+  assign out1 = selb ? in2 : in1;
+
+  // Mutiplexer
+  assign outb = in1[sel];
+
+  // Demultiplexer
+  assign out1[sel] = inb;
+
+  // D latch
+  assign q = en ? d : q;
+  ```
+
+---
+
+## Shortcuts for coding
+
+- Declaring output and reg in same statement
+
+  ```verilog
+  output reg[7:0] data;
+
+  // Instead of
+  output[7:0]     data;
+  reg[7:0]        data;
+  ```
+
+- Declaring reg type variables with initial value
+
+  ```verilog
+  reg data = 0;
+
+  // Instead of
+  reg data;
+  initial data = 0;
+  ```
+
 
 ---
 
