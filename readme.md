@@ -651,7 +651,9 @@ multiple always statements, they all start to execute concurrently at time 0.
 - ```@(signal) statement;``` will wait for signal to change and if when ther is a change, executes statement.
 - ```always @(signal)``` can be used to run procedural statements whenever there is a change in signal.
 - ```@(posedge signal)``` triggers at the positive edge of signal.
+  - positive edge is defined as ```0 -> x/z -> 1```
 - ```@(negedge signal)``` triggers at the negative edge of the signal.
+  - negative edge is defined as ```1 -> x/z -> 0```
 - Multiple events can be used to trigger by using ```or```
   ```verilog
   always @(posedge clk or reset or my_event)
