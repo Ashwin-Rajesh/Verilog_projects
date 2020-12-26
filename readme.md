@@ -717,6 +717,7 @@ multiple always statements, they all start to execute concurrently at time 0.
   repeat ( no_of_times )
     statement;
   ```
+  - If argument is a variable/signal, it is evaluated only when repeat() statment is called
 
 - ```forever```
   ```verilog
