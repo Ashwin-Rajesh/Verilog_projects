@@ -687,6 +687,18 @@ multiple always statements, they all start to execute concurrently at time 0.
     default       : statement;
   endcase
   ```
+- 2 variants
+  - ```casez``` : Considers ```z``` in case values as dont cares
+  - ```casex``` : Considers ```x``` and ```z``` in case values as dont cares
+    ```verilog
+    casex (sel)
+      4'b1xxx : num = 0;    // Matches 4'b10xx
+      4'bx1xx : num = 1;    // Matches 4'b01zx
+      4'bxx1x : num = 2;
+      4'bxxx1 : num = 3;
+      default : num = -1;
+    endcase
+    ```
 
 - ```while```
   ```verilog
