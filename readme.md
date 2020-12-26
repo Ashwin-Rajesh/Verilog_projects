@@ -654,6 +654,7 @@ multiple always statements, they all start to execute concurrently at time 0.
   - positive edge is defined as ```0 -> x/z -> 1```
 - ```@(negedge signal)``` triggers at the negative edge of the signal.
   - negative edge is defined as ```1 -> x/z -> 0```
+- ```@(*)``` will be triggered when any of the input variables change.
 - Multiple events can be used to trigger by using ```or```
   ```verilog
   always @(posedge clk or reset or my_event)
@@ -682,11 +683,11 @@ multiple always statements, they all start to execute concurrently at time 0.
 - ```case```
   ```verilog
   case ( expr )
-    value1        : statement;
-    value2        : statement;
-    value3        : statement;
+    value1          : statement;
+    value2          : statement;
+    value3, value4  : statement;  // Multiple cases for same statement
     ...
-    default       : statement;
+    default         : statement;
   endcase
   ```
 - 2 variants
