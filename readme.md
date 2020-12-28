@@ -597,6 +597,16 @@ multiple always statements, they all start to execute concurrently at time 0.
 - Non-blocking assignments do not wait for other non-blocking assignments of the same time. They are all executed concurrently. ```register <= expression;```
 - There can be intra-assignment delay (immediate evaluation, delayed assignment) ```register = #delay expression;```
 
+  ```verilog
+  a <= #5 in1;      // Time 5 : a = in1
+  b <= #5 in2;      // Time 5 : b = in2
+  ```
+  ```verilog
+  a = #5 in1;       // Time 5 : a = in1
+  b = #5 in2;       // Time 10 : b = in2
+  ```
+- Recmmended not to use blocking and non-blocking in same procedural blcok.
+
 ### Quasi-continuous assignments
 
 - LHS must be reg type, and assignment inside procedural blocks.
