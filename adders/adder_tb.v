@@ -1,11 +1,15 @@
 module adder_tb;
-    reg[3:0] a, b;
+
+    parameter WIDTH=8;
+    
+    reg[WIDTH-1:0] a, b;
     reg cin;
 
-    wire[3:0] s;
+
+    wire[WIDTH-1:0] s;
     wire cout;
 
-    adder mod(a, b, cin, s, cout);
+    adder #(.WIDTH(8)) mod(a, b, cin, s, cout);
 
     initial
     begin
