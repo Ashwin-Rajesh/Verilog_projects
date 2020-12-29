@@ -812,7 +812,7 @@ Some rules of thumb to see how behavioral statements are usually synthesised.
 
 ## Generate block
 
-- Generate block can be used to dynamically create hardware definitions from iterative and conditional constructs (for, while, if, etc) to avoid having to repeat same code several times.
+- Generate block can be used to dynamically create hardware definitions from iterative and conditional constructs (for, while, if, case, etc) to avoid having to repeat same code several times.
 - Can be used for dynamically(still at compile-time, you cant create hardware from thin air!) instantiating
   - Modules
   - User-defined primitives
@@ -821,7 +821,111 @@ Some rules of thumb to see how behavioral statements are usually synthesised.
   - Procedural assignment blocks
 - We need special variables of type ```genvar```
   - Only used and defined inside generate blocks
+- As an example, look at my implementation of adders : 
+  - [Ripple carry adder using generate](./adders/ripple_adder.v)
+    ```verilog
+    genvar i;
 
+    generate for (i = 0; i < WIDTH; i = i + 1) 
+      full_adder fa(a[i], b[i], c[i], s[i], c[i+1]);     
+    endgenerate
+    ```
+  - [Look-ahead adder using generate](./adders/lookahead_adder.v)
+    ```verilog
+    genvar i,j;
+    
+    generate 
+      for (i = 0; i < WIDTH ; i = i + 1)
+      begin
+        // Example
+        // c[3] = g[2]      + g[1].p[2]     + g[0].p[1].p[2]    + c[0].p[0].p[1].p[2]
+        //        temp[3]     temp[2]         temp[1]             temp[0]    
+        wire[i+1:0] temp;
+          
+        assign temp[0] = &{c[0], p[i:0]};
+        assign temp[i+1] = g[i];
+        
+        for (j = 1; j < i+1; j = j + 1)
+            assign temp[j] = &{g[j-1], p[i:j]};
+        
+        assign c[i+1] = |(temp);
+      end         
+    endgenerate
+    ```
+
+---
+
+## User Defined Primitives
+
+- They should have one and only one output.
+- Output can be ```1```, ```0```, ```x``` or ```z```.
+- Inputs with ```z``` are automatically changed to ```x```
+- We define possible inputs and their corresponding outputs using ```table``` and ```endtable```
+- The symbols that can be used in the table are
+  - ```0``` : Logic 0
+  - ```1``` : Logic 1
+  - ```x``` : Unknown value
+  - ```?``` : Can be 0/1/x
+  - ```-``` : No change. Only allowed as output
+  - ```ab``` : Change from a to b eg) ```01```, ```?1```
+  - ```*``` : Any change in input. Same as ```??```
+  - ```r``` : Rising edge. Same as ```01```
+  - ```f``` : Falling edge. Same as ```10```
+  - ```p``` : Potential positive edge. Either ```01``` or ```0x``` or ```x1```
+  - ```n``` : Potential negative edge. Either ```10``` or ```1x``` or ```x0```
+- Example
+  - 2x1 multiplexer (combinational ex)
+    ```verilog
+    primitive mux(out, sel, a, b);
+      output out;
+      input sel, a, b;
+
+      table
+        //sel a   b   : out
+          0   1   ?   : 1;
+          0   0   ?   : 0;
+          1   ?   1   : 1;
+          1   ?   0   : 0;
+          x   0   0   : 0;
+          x   1   1   : 1;
+      endtable
+    endprimitive
+    ```
+  - D latch (sequential level-triggered ex)
+    ```verilog
+    primitive dlatch (d, en, clr, q);
+      input d, en, clr;
+      output reg q;
+
+      initial q = 0;
+
+      table
+      //d   en  clr : q : q(new)
+        ?   0   0   : ? : -;
+        ?   ?   1   : ? : 0;
+        1   1   0   : ? : 1;
+        0   1   0   : ? : 0;
+      endtable
+    endprimitive
+
+    ```
+  - T flip-flop (sequential edge-triggered example)
+    ```verilog
+    primitive tflipflop (clk, clr, q);
+      input d, clk, clr;
+      output reg q;
+
+      initial q = 0;
+
+      table
+      //clk clr : q : q(new)
+        ?   1   : ? : 0;
+        0?  0   : ? : -;
+        10  0   : 1 : 0;
+        10  0   : 0 : 1;
+      endtable
+    endprimitive
+    ``` 
 
 ---
 
