@@ -808,6 +808,20 @@ Some rules of thumb to see how behavioral statements are usually synthesised.
   initial data = 0;
   ```
 
+---
+
+## Generate block
+
+- Generate block can be used to dynamically create hardware definitions from iterative and conditional constructs (for, while, if, etc) to avoid having to repeat same code several times.
+- Can be used for dynamically(still at compile-time, you cant create hardware from thin air!) instantiating
+  - Modules
+  - User-defined primitives
+  - Gates
+  - Continous assignment statements
+  - Procedural assignment blocks
+- We need special variables of type ```genvar```
+  - Only used and defined inside generate blocks
+
 
 ---
 
