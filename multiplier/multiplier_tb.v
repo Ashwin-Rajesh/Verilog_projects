@@ -1,5 +1,3 @@
-`timescale 10ns/1ns
-
 module multiplier_tb;
     parameter WIDTH = 16;
 
