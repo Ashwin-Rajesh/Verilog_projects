@@ -14,8 +14,8 @@ module multiplier(ina, inb, clk, out);
 
         // Standard multiplication algorithm
         for(i = 0; i < 2 * WIDTH; i=i+1)
-            #0.1 if(inb[i] == 1'b1)
-                temp = temp + (ina << i);
+            if(inb[i] == 1'b1)
+                temp <= #1 temp + (ina << i);
 
         out = temp;
     end
