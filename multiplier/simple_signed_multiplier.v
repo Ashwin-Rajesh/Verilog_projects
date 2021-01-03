@@ -14,7 +14,7 @@ module simple_signed_multiplier(ina, inb, clk, out);
     generate
         begin
             for(i = 1; i < WIDTH; i = i + 1) begin : mult_stage
-                assign partial_sum[i] = partial_sum[i-1] + ({(2*WIDTH){inb[i]}} & ina);
+                assign partial_sum[i] = partial_sum[i-1] + ({(2*WIDTH){inb[i]}} & (ina << i));
             end
         end
     endgenerate
