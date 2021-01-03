@@ -1,22 +1,23 @@
-module multiplier(ina, inb, clk, out);
+module simple_signed_multiplier(ina, inb, clk, out);
     parameter WIDTH=8;
     
     input [WIDTH-1: 0]          ina, inb;
     input                       clk;
     output reg [2*WIDTH - 1: 0] out;
-    reg[2*WIDTH-1 : 0]          temp;
+    
+    wire[2*WIDTH-1 : 0]         partial_sum[0:WIDTH-1];
 
-    integer                     i;
+    genvar i;
 
-    always @(posedge clk)
-    begin    
-        temp = 0;
-
-        // Standard multiplication algorithm
-        for(i = 0; i < 2 * WIDTH; i=i+1)
-            if(inb[i] == 1'b1)
-                temp <= #1 temp + (ina << i);
-
-        out = temp;
-    end
+    assign partial_sum[0] = {(2*WIDTH){inb[0]}} & ina; 
+    
+    generate
+        begin
+            for(i = 1; i < WIDTH; i = i + 1) begin : mult_stage
+                assign partial_sum[i] = partial_sum[i-1] + ({(2*WIDTH){inb[i]}} & ina);
+            end
+        end
+    endgenerate
+    
+    always @(posedge clk) out = partial_sum[WIDTH-1];
 endmodule
