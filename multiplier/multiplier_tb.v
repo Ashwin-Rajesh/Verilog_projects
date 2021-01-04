@@ -1,20 +1,24 @@
 module multiplier_tb;
     parameter WIDTH = 8;
 
-    reg signed[WIDTH - 1:0]        ina, inb;
+    reg [WIDTH - 1:0]        ina, inb;
     reg                     clk;
     reg                     clk2;
     reg                     start;
-    wire signed[2 * WIDTH - 1:0]   out;
-    reg signed[2 * WIDTH - 1:0]    ref;
+    wire [2 * WIDTH - 1:0]   out;
+    reg [2 * WIDTH - 1:0]    ref;
     wire                    ready; 
+
+    wire [2 * WIDTH - 1:0] eq = ~(out ^ ref);
 
     integer i;
 
     // simple_unsigned_multiplier #(WIDTH) tud(ina, inb, clk, out);
     // seq_unsigned_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
-    // streamlined_multiplier#(WIDTH) tud(ina, inb, clk2, start, out, ready);
-    signed_streamlined_multiplier#(WIDTH) tud(ina, inb, clk2, start, out, ready);
+    // streamlined_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
+    // signed_streamlined_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
+    radix_4_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
+
 
     initial begin
         $monitor("%8d * %8d = %16d", ina, inb, out);
@@ -27,7 +31,7 @@ module multiplier_tb;
         clk     = 0;
         clk2    = 0;
 
-        #200 $finish;
+        #500 $finish;
     end
 
     always begin
