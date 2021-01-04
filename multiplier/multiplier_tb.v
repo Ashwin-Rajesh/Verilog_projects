@@ -12,7 +12,8 @@ module multiplier_tb;
     integer i;
 
     // simple_unsigned_multiplier #(WIDTH) tud(ina, inb, clk, out);
-    seq_unsigned_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
+    // seq_unsigned_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
+    streamlined_multiplier#(WIDTH) tud(ina, inb, clk2, start, out, ready);
 
     initial begin
         $monitor("%8d * %8d = %16d", ina, inb, out);
