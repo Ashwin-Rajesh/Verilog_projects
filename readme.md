@@ -333,11 +333,7 @@ Tasks and functions are similar to procedures and functions in c. They are defin
   function [3:0] test_func;
     input [1:0] businp;
     
-    // Body of function
-    begin
-    ...
     test_func = ...; // Return value
-    end
   endfunction
   ```
 
@@ -654,6 +650,13 @@ multiple always statements, they all start to execute concurrently at time 0.
 - Parallel blocks
   - ```fork``` and ```join```
   - Statements are all executed at the same time. Order is irrelevant
+
+- Blocks can be named by appending ``` : name```
+  ```verilog
+  begin : sample_name
+    ...
+  end
+  ```
 
 ---
 
