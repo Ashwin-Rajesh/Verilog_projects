@@ -2,7 +2,7 @@
 proj_name 	= multiplier
 
 # Source files used
-source 		= simple_signed_multiplier.v
+source 		= simple_unsigned_multiplier.v
 
 # Testbench code
 testbench	= $(proj_name)_tb.v

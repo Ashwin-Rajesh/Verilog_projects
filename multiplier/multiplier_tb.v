@@ -9,7 +9,7 @@ module multiplier_tb;
 
     integer i;
 
-    simple_signed_multiplier #(WIDTH) tud(ina, inb, clk, out);
+    simple_unsigned_multiplier #(WIDTH) tud(ina, inb, clk, out);
 
     initial begin
         $monitor("%8d * %8d = %16d", ina, inb, out);
