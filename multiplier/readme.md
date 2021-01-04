@@ -78,6 +78,12 @@ Digital multiplier circuits implemented in verilog
 
 ---
 
+## Streamlined multiplier
+
+- Uses a single register for storing both the partial product and the multiplier.
+
+---
+
 ## References
 - https://www.ece.lsu.edu/ee3755/2002/l07.html
 
