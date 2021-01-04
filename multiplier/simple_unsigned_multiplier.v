@@ -1,4 +1,4 @@
-module simple_signed_multiplier(ina, inb, clk, out);
+module simple_unsigned_multiplier(ina, inb, clk, out);
     parameter WIDTH=8;
     
     input [WIDTH-1: 0]          ina, inb;
