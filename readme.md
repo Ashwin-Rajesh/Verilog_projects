@@ -206,6 +206,7 @@ defparam
   test_instance.param_3=value_3;
 
 ```
+- ```localparam``` can be used instead of ```parameter``` for parameters that cannot be over-ridden during instantiation.
 
 ---
 
@@ -395,9 +396,19 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
 - These can dump variable changes to a simulation viewer like GTKWave.
 
 - ```$dumpfile("filename")``` : Sets the file name to dump values into
-- ```$dumpvar(n, module)``` : Dumps variables in module instantiated with name ```module``` and n levels below
-- ```$dumpon``` : Initiates dump
+- ```$dumpvars(n, module)``` : Dumps variables in module instantiated with name ```module``` and n levels below
+  - Note that ```$dumpvars``` does not include array variables into the waveform.
+  - To add array variables, they need to be manually specified
+    ```verilog
+    $dumpvars(1, tud.mem[0]);
+    // Where mem is defined in module tud as
+    // reg[7:0] mem[0:1024];
+    ```
+  - To add all values, use a for loop. There is no other way
+- ```$dumpon``` : Initiates dump (only required if stopped manually)
 - ```$dumpoff``` : Stops dump
+- ```$dumpall``` : Dump all variables
+- ```$dumplimit(size)``` : Sets limit on .vcd file size
 
 ---
 
@@ -763,53 +774,6 @@ Like in ```#``` directives in c, there are compiler directives in verilog, which
 
 ---
 
-## Synthesis rules
-
-Some rules of thumb to see how behavioral statements are usually synthesised.
-- ```assign``` statements generally generates combinational logic. However, sequential logic can be formed sismilar to how gates can be used to form sequential building blocks.
-- Conditional statements generate n-bit wide 2-to-1 multiplexers.
-- Variable indexing on the right produces a multiplexer.
-- Variable indexing on the left produces a demultiplexer.
-  ```verilog
-  // n-bit wide 2-to-1 mux
-  assign out1 = selb ? in2 : in1;
-
-  // Mutiplexer
-  assign outb = in1[sel];
-
-  // Demultiplexer
-  assign out1[sel] = inb;
-
-  // D latch
-  assign q = en ? d : q;
-  ```
-
----
-
-## Shortcuts for coding
-
-- Declaring output and reg in same statement
-
-  ```verilog
-  output reg[7:0] data;
-
-  // Instead of
-  output[7:0]     data;
-  reg[7:0]        data;
-  ```
-
-- Declaring reg type variables with initial value
-
-  ```verilog
-  reg data = 0;
-
-  // Instead of
-  reg data;
-  initial data = 0;
-  ```
-
----
-
 ## Generate block
 
 - Generate block can be used to dynamically create hardware definitions from iterative and conditional constructs (for, while, if, case, etc) to avoid having to repeat same code several times.
@@ -865,8 +829,8 @@ Some rules of thumb to see how behavioral statements are usually synthesised.
   - ```0``` : Logic 0
   - ```1``` : Logic 1
   - ```x``` : Unknown value
-  - ```?``` : Can be 0/1/x
-  - ```-``` : No change. Only allowed as output
+  - ```?``` : Can be 0/1/x (input only)
+  - ```-``` : No change. (output only)
   - ```ab``` : Change from a to b eg) ```01```, ```?1```
   - ```*``` : Any change in input. Same as ```??```
   - ```r``` : Rising edge. Same as ```01```
@@ -926,6 +890,138 @@ Some rules of thumb to see how behavioral statements are usually synthesised.
       endtable
     endprimitive
     ``` 
+
+---
+
+## Synthesis rules
+
+Some rules of thumb to see how behavioral statements are usually synthesised.
+- ```assign``` statements generally generates combinational logic. However, sequential logic can be formed similar to how gates can be used to form sequential building blocks.
+- Conditional statements generate n-bit wide 2-to-1 multiplexers.
+- Variable indexing on the right produces a multiplexer.
+- Variable indexing on the left produces a demultiplexer.
+  ```verilog
+  // n-bit wide 2-to-1 mux
+  assign out1 = selb ? in2 : in1;
+
+  // Mutiplexer
+  assign outb = in1[sel];
+
+  // Demultiplexer
+  assign out1[sel] = inb;
+
+  // D latch
+  assign q = en ? d : q;
+  ```
+
+### For synthesizing combinational circuits
+
+- Do not rely on delays for timing (they are for simulation)
+- There must not be feedback in combinational circuits
+- For ```if ... else``` or ```case``` constructs, output of combinational ckts must be provided for all input cases.
+- Else, circuit can be synthesized as sequential
+
+### Styles for synthesis
+
+- Netlist of verilog built-in primitives
+  ```verilog
+  module half_adder(a, b, s, cout);
+    input   a, b;
+    output  s, cout;
+
+    xor x1(s, a, b);
+    and a1(cout, a, b);
+  endmodule
+  ```
+- Using user-defined primitives (UDPs)
+- Continuous assignments
+  ```verilog
+  module carry(cout, a, b, c);
+    output  cout;
+    input   a, b, cl
+
+    assign cout = (a & b) | (b & c) | (a & c);
+  endmodule;
+  ```
+- Using procedural blocking assignments
+  ```verilog
+  module mux2to1(f, in0, in1, sel);
+    input in0, in1, sel;
+    output reg f;
+
+    always @(in0 or in1 or sel)
+      if(sel)   f = in1;
+      else      f = in0;
+  endmodule
+  ```
+- Functions
+  ```verilog
+  module full_adder(s, cout, a, b, cin);
+    input a, b, cin;
+    output s, cout;
+
+    assign s    = sum(a, b, cin);
+    assign cout = carry(a, b, cin);
+  endmodule
+
+  function sum;
+    input x, y, z;
+    
+    sum = x ^ y ^ z;
+  endfunction
+
+  function carry;
+    input x, y, z;
+    
+    carry = (x & y) | (x & z) | (y & z);
+  endfunction
+  ```
+- Tasks (without event or delay control)
+  ```verilog
+    module full_adder(s, cout, a, b, cin);
+    input a, b, cin;
+    output reg s, cout;
+
+    always @(*)
+      FA(s, cout, a, b, cin);
+
+    task FA;
+      output sum, carry;
+      input A, B, C;
+
+      begin
+        sum = A ^ B ^ C;
+        carry = (A & B) | (A & C) | (B & C);
+      end
+    endtask
+  endmodule
+  ```
+- Behavioral statements
+- Interconnected modules of above
+
+---
+
+## Shortcuts for coding
+
+- Declaring output and reg in same statement
+
+  ```verilog
+  output reg[7:0] data;
+
+  // Instead of
+  output[7:0]     data;
+  reg[7:0]        data;
+  ```
+
+- Declaring reg type variables with initial value
+
+  ```verilog
+  reg data = 0;
+
+  // Instead of
+  reg data;
+  initial data = 0;
+  ```
 
 ---
 
