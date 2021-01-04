@@ -4,7 +4,8 @@ proj_name 	= multiplier
 # Source files used
 source 		= simple_unsigned_multiplier.v \
 				seq_unsigned_multiplier.v \
-				streamlined_multiplier.v
+				streamlined_multiplier.v \
+				signed_streamlined_multiplier.v
 
 # Testbench code
 testbench	= $(proj_name)_tb.v
