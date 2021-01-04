@@ -4,7 +4,7 @@ Digital multiplier circuits implemented in verilog
 
 ---
 
-## Simple unsigned multiplier
+## Combinational unsigned multiplier
 
 - Uses combinational logic
 - Space complexity : n^2
@@ -25,13 +25,55 @@ Digital multiplier circuits implemented in verilog
     (60)
     ```
 
-- Verilog code is straight-forward. We use a loop for shifting.
+- To generate the combinational circuit, we use generate statements.
     ```verilog
-    out = 0;
+    assign partial_sum[0] = {(2*WIDTH){inb[0]}} & ina; 
+    
+    generate
+        begin
+            for(i = 1; i < WIDTH; i = i + 1) begin : mult_stage
+                assign partial_sum[i] = partial_sum[i-1] + ({(2*WIDTH){inb[i]}} & (ina << i));
+            end
+        end
+    endgenerate
+    ```
 
-    for(i = 0; i < 2 * WIDTH; i=i+1)
-        if(multiplier[i] == 1'b1)
-            out <= out + (multiplicand << i);
+---
+
+## Sequential unsigned multiplier
+
+- Is a sequeuntial cirtuit.
+- Takes several clock cycles to compute result.
+- Every clock cycle,
+  - If LSB of multiplier is 1, we add the multiplicand
+  - We shift multiplier one bit to the right
+  - We shigt the multiplicand one bit to the left
+
+- Verilog code
+    ```verilog
+    always @(posedge clk)
+    begin
+        if(start == 1'b1) begin
+            multiplicand <= ina;
+            multiplier   <= inb;
+            bit          <= WIDTH;
+            temp         <= 0;
+            ready        <= 1'b0;
+        end
+
+        if(bit != 4'b0) begin
+            if(multiplier[0] == 1'b1)
+                temp = temp + multiplicand;
+            multiplicand = multiplicand << 1;
+            multiplier   = multiplier >> 1;
+            bit          = bit - 1;
+
+            if(bit == 1'b0) begin
+                out = temp;
+                ready = 1'b1; 
+            end
+        end
+    end
     ```
 
 ---
