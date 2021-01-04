@@ -2,7 +2,7 @@
 proj_name 	= pattern_detector
 
 # Source files used
-source 		= three_ones.v
+# source 		= three_ones.v
 source		= parity.v
 
 # Testbench code
