@@ -17,11 +17,14 @@ module adder(a, b, cin, s, cout);
     assign #1 p = a ^ b;
     assign #1 s = a ^ b ^ c;
 
-    genvar i;
-    genvar j;
+    genvar i, j;
+
     generate 
         for (i = 0; i < WIDTH ; i = i + 1)
         begin
+            // Example
+            // c[3] = g[2]      + g[1].p[2]     + g[0].p[1].p[2]    + c[0].p[0].p[1].p[2]
+            //        temp[3]     temp[2]         temp[1]             temp[0]
             wire[i+1:0] temp;
             
             assign temp[0] = &{c[0], p[i:0]};
@@ -31,8 +34,7 @@ module adder(a, b, cin, s, cout);
                 assign temp[j] = &{g[j-1], p[i:j]};
 
             assign c[i+1] = |(temp);
-        end
-                
+        end         
     endgenerate
 
 endmodule
