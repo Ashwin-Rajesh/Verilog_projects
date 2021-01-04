@@ -18,11 +18,11 @@ module seq_unsigned_multiplier(ina, inb, clk, start, out, ready);
     always @(posedge clk)
     begin
         if(start == 1'b1) begin
-            multiplicand <= ina;
-            multiplier   <= inb;
-            bit          <= WIDTH;
-            partial_product         <= 0;
-            ready        <= 1'b0;
+            multiplicand = ina;
+            multiplier   = inb;
+            bit          = WIDTH;
+            partial_product         = 0;
+            ready        = 1'b0;
         end
 
         if(bit != 4'b0) begin
