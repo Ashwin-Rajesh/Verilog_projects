@@ -2,6 +2,8 @@
 
 A finite state machine (FSM) that detects some pattern in a bitstream. This folder implements several FSMs.
 
+Note : Images are from nptel verilog lectures available on youtube. [Click here for the playlist](https://www.youtube.com/playlist?list=PLUtfVcb-iqn-EkuBs3arreilxa2UKIChl)
+
 ---
 
 ## Three consecutive ones
@@ -36,4 +38,12 @@ Here we need to count the number of ones. The output must be ```1``` if number o
  
 The above diagram is for a moore machine. But, we can implement this as a mealy machine also with same number of states. Output for even state will be 0 and for odd state will be 1.
 
+```verilog
+always @(posedge clk)
+    if(in)
+        out <= ~out;
+```
 
+---
+
+## 
