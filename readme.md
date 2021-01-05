@@ -406,6 +406,22 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
 - ```$dumpall``` : Dump all variables
 - ```$dumplimit(size)``` : Sets limit on .vcd file size
 
+### Memory manipulation
+
+- We can load values from files into memory elements.
+
+- ```$readmemb(filename, memname, startaddr, stopaddr)```
+  - Reads data in binary from ```filename```
+  - Writes it into memory element ```memname``` from address ```startaddr``` to ```stopaddr``` (last 2 parameters are optional)
+
+- ```$readmemb(filename, memname, startaddr, stopaddr)```
+  - Reads data in hexadecimal format from ```filename```
+
+- Memory is modeled as array of register vectors, like 
+
+  ```verilog
+  reg[7:0] memory[1023:0];
+  ```
 ---
 
 ## Operators
