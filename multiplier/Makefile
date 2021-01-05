@@ -6,7 +6,8 @@ source 		= simple_unsigned_multiplier.v \
 				seq_unsigned_multiplier.v \
 				streamlined_multiplier.v \
 				signed_streamlined_multiplier.v \
-				radix_4_multiplier.v
+				radix_4_multiplier.v \
+				radix_2_booth_multiplier.v
 
 # Testbench code
 testbench	= $(proj_name)_tb.v
