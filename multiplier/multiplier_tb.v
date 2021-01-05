@@ -1,12 +1,13 @@
 module multiplier_tb;
     parameter WIDTH = 8;
 
-    reg [WIDTH - 1:0]        ina, inb;
+    reg signed[WIDTH - 1:0]        ina, inb;
     reg                     clk;
     reg                     clk2;
     reg                     start;
     wire [2 * WIDTH - 1:0]   out;
-    reg [2 * WIDTH - 1:0]    ref;
+    reg signed [2 * WIDTH - 1:0]    ref;
+    reg [2*WIDTH-1 : 0]     absref;
     wire                    ready; 
 
     wire [2 * WIDTH - 1:0] eq = ~(out ^ ref);
@@ -17,8 +18,8 @@ module multiplier_tb;
     // seq_unsigned_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
     // streamlined_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
     // signed_streamlined_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
-    radix_4_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
-
+    // radix_4_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
+    radix_2_booth_multiplier #(WIDTH) tud(ina, inb, clk2, start, out, ready);
 
     initial begin
         $monitor("%8d * %8d = %16d", ina, inb, out);
@@ -39,6 +40,7 @@ module multiplier_tb;
         ina = $random;
         inb = $random;
         ref = ina * inb;
+        absref = (absolute(ina) * absolute(inb));
         clk = 0;
         start = 1;
         
@@ -49,4 +51,9 @@ module multiplier_tb;
 
     always #0.5 clk2 = ~clk2;
 
+    function[WIDTH-1:0] absolute;
+        input[WIDTH-1:0] in;
+
+        absolute = (in[WIDTH-1])? -in : in;
+    endfunction
 endmodule
