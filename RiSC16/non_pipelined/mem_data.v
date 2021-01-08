@@ -27,7 +27,7 @@ module mem_data (dataOut, address, dataIn, clk, writeEn, rst);
     input writeEn;                          // Active high signal for enabling write    
     input rst;                              // Reset whole memory to 0
 
-    // We cannot simulate 2**ADDR_LEN, so we choose a smaller instruction memory size
+    // We cannot simulate 2**ADDR_LEN, so we choose a smaller data memory size
     wire[$clog2(`DATA_MEM_SIZE):0] address_trunc = 
         address[$clog2(`DATA_MEM_SIZE):0];
 
@@ -40,10 +40,8 @@ module mem_data (dataOut, address, dataIn, clk, writeEn, rst);
             for (i = 0; i < `DATA_MEM_SIZE; i = i + 1) begin
                 memory[i] <= 0;
             end
-        else if(writeEn) begin
+        else if(writeEn)
             {memory[address_trunc], memory[address_trunc+1]} <= dataIn;
-            $display(".");
-        end
     end
 
     assign dataOut = {memory[address_trunc], memory[address_trunc+1]};
