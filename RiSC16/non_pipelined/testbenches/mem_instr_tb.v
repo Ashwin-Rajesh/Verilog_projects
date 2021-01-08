@@ -15,7 +15,7 @@ module mem_instr_tb;
         $dumpvars(0, mem_instr_tb);
         
         rst = 1'b1; 
-        #1 rst = 1'b0;
+        #2 rst = 1'b0;
         
         // Read from stored addresses
         for(i = 0; i < 100; i = i + 1) begin
