@@ -5,7 +5,11 @@ object		= bin/test.out
 
 wave		= test.vcd
 
-code		= ./code/reset.data
+code		= code/reset.data
+
+assembler   = ../assembler.py
+
+code_src	= code/reset.asm
 
 view	: $(wave)
 	gtkwave $(wave)
@@ -23,6 +27,9 @@ $(object): $(sources)
 
 $(wave): $(object) $(code)
 	vvp $(object)
+
+$(code): $(code_src)
+	$(assembler) $(code_src) $(code)
 
 # Module testing
 # Module to be tested
