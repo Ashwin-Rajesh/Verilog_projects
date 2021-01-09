@@ -1,31 +1,58 @@
+# All files
+sources 	= ./*.v
+
+object		= bin/test.out
+
+wave		= test.vcd
+
+code		= ./code/reset.data
+
+view	: $(wave)
+	gtkwave $(wave)
+.PHONY:view
+
+compile	: $(object)
+.PHONY:compile
+
+run		: $(object)
+	vvp $(object)
+.PHONY:object
+
+$(object): $(sources)
+	iverilog $(sources) -o $(object)
+
+$(wave): $(object) $(code)
+	vvp $(object)
+
+# Module testing
 # Module to be tested
-mut_name 	= mem_reg
+mod_name 	= mem_reg
 
 # Source file for module
-source		= $(mut_name).v
+mod_src		= $(mod_name).v
 
 # Testbench code
-testbench	= testbenches/$(mut_name)_tb.v
+mod_tb		= testbenches/$(mod_name)_tb.v
 
 # Result of compilation
-object		= testbenches/$(mut_name).out
+mod_obj		= bin/$(mod_name).out
 
 # Waveform file
-wave		= testbenches/$(mut_name).vcd
+mod_wave	= testbenches/$(mod_name).vcd
 
-compile: $(object)
+mod_compile	: $(mod_obj)
 .PHONY: compile
 
-$(object): $(source) $(testbench)
-	iverilog $(testbench) $(source) -o $(object)
-
-$(wave): $(object) $(data)
-	./$(object)
-
-view: $(wave)
-	gtkwave $(wave)
+mod_view	: $(mod_wave)
+	gtkmod_wave $(mod_wave)
 .PHONY: view
 
-run: $(object)
-	./$(object)
+mod_run		: $(mod_obj)
+	./$(mod_obj)
 .PHONY:run
+
+$(mod_obj): $(mod_src) $(mod_tb)
+	iverilog $(mod_tb) $(mod_src) -o $(mod_obj)
+
+$(mod_wave): $(mod_obj)
+	./$(mod_obj)
