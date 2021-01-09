@@ -21,7 +21,7 @@ module tb;
         #2;
         reset = 0;
 
-        #100 $finish;
+        #200 $finish;
     end
 
     always #1 clk = ~clk;
