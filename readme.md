@@ -422,6 +422,13 @@ System tasks are built-in tasks. All system tasks are preceeded with ```$```
   ```verilog
   reg[7:0] memory[1023:0];
   ```
+
+### Log
+
+- Log of 2 is very useful in verilog because we can get the width of a bus required to accomodate some maximum value.
+- ```clog2(inp)```
+  - Logarithm of 2, ceiled (if result is not a perfect integer, the next highest integer is taken)
+
 ---
 
 ## Operators
