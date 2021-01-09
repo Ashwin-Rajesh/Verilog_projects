@@ -75,7 +75,6 @@ module control (clk, reset);
 
     // Data memory wires
     wire[`WORD_LEN-1:0]     mem_dataOut;    // Datapath
-    wire[`WORD_LEN-1:0]     mem_dataIn;     // Datapath
 
     reg                     mem_writeEn;    // Control out
 
@@ -147,10 +146,10 @@ module control (clk, reset);
         mem_dataOut, 
         // Inputs
         alu_out, 
-        mem_dataIn, 
+        reg_src2, 
         clk, 
         mem_writeEn, 
-        rst
+        reset
     );
 
     // Writeback stage
@@ -167,7 +166,7 @@ module control (clk, reset);
     // Control stage
     assign opcode = instr[15:13];
 
-    always @(opcode) case (opcode)
+    always @(alu_stat or opcode) case (opcode)
         `OPCODE_ADD     : begin 
             alu_funct   <= `FUNCT_ADD;
             
