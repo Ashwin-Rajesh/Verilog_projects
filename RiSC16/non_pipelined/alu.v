@@ -36,6 +36,9 @@ module alu (out, stat, ina, inb, funct);
         case(funct)
             `FUNCT_ADD  : out <= ina + inb;
             `FUNCT_NAND : out <= ~(ina & inb);
+            `FUNCT_PASSA: out <= ina;
+            `FUNCT_SUB  : out <= ina - inb;
+            default     : out <= 0;
         endcase
     end
 endmodule
