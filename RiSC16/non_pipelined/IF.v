@@ -42,8 +42,8 @@ module IF(next_pc, instr, clk, reset, alu_out, mux_pc) ;
                 `SEL_PC_ALU     : pc = alu_out; 
                 default : pc = pc;
             endcase
-            instr = next_instr;
         end
+        @(next_instr) instr = next_instr;
     end
 
 endmodule
