@@ -41,7 +41,7 @@ module mem_reg (out1, out2, src1, src2, tgt, in, clk, writeEn, rst);
     assign out1 = memory[src1];
     assign out2 = memory[src2];
 
-    always @(posedge clk) begin : write_block
+    always @(negedge clk) begin : write_block
         if(rst)
             for(i = 0; i < `REG_FILE_SIZE; i = i + 1)
                 memory[i] <= 0;

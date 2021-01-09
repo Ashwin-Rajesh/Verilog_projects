@@ -35,7 +35,7 @@ module mem_data (dataOut, address, dataIn, clk, writeEn, rst);
 
     integer i;
     // Reset memory by reading from the file code/reset.data
-    always @(posedge clk) begin
+    always @(negedge clk) begin
         if(rst)
             for (i = 0; i < `DATA_MEM_SIZE; i = i + 1) begin
                 memory[i] <= 0;
