@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 import sys
+import os
 
 def get_opcode(inp):
     if(inp == "add"):
@@ -10,9 +13,9 @@ def get_opcode(inp):
     if(inp == "lui"):
         return "011", 3
     if(inp == "sw"):
-        return "101", 4
+        return "100", 4
     if(inp == "lw"):
-        return "100", 5
+        return "101", 5
     if(inp == "beq"):
         return "110", 6
     if(inp == "jalr"):
@@ -54,6 +57,7 @@ def get_imm(inp):
 
     return "0"*(10-len(out)) + out, abs
 
+# Splits the bitstream into sections of 8 each and writes into the file file_name
 def write_code(file_name, bitstream):
     with open(file_name, "w") as f:
         for i in range(len(bitstream)//8):
@@ -62,8 +66,16 @@ def write_code(file_name, bitstream):
     f.close()
 
 def main():
+    if(len(sys.argv) == 1):
+        print("No input file name detected. Plesae pass input file name as argument.")
+        return
+
     source_file = sys.argv[1]
-    dest_file   = sys.argv[2]
+    
+    if(len(sys.argv) == 2):
+        dest_file = os.path.splitext(source_file)[0] + ".data"
+    else:
+        dest_file   = sys.argv[2]
 
     print(f"Source      : {source_file}")
     print(f"Destination : {dest_file}")
