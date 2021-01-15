@@ -111,6 +111,7 @@ module i2c_slave(sda, scl, rst, out);
             end
             MODE_DATA_W_ACK:begin
                 mode    <= MODE_END;
+                mem     <= data;
             end
         endcase
     end
