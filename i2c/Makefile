@@ -2,7 +2,7 @@
 proj_name 	= i2c
 
 # Source files used
-source 		= i2c_slave.v
+source 		= i2c_master.v i2c_slave.v
 
 # Testbench code
 testbench	= $(proj_name)_tb.v
