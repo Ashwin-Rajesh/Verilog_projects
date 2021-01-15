@@ -83,8 +83,8 @@ module i2c_slave(sda, scl, rst, out);
         case(mode)
             MODE_START:begin
                 mode    <= MODE_ADDR;
-                data    <= {sda, 7'b0};
-                count   <= 7;
+                data    <= {1'b0, sda, 6'b0};
+                count   <= 6;
             end
             MODE_ADDR:begin
                 mode    <= count == 0 ? MODE_RW : MODE_ADDR;
