@@ -1,6 +1,6 @@
 `timescale 10ns/1ns
 
-module i2c_tb;
+module i2c_slave_tb;
     reg sda_in;
     reg scl;
     reg rst;
@@ -11,7 +11,7 @@ module i2c_tb;
     pullup pu(sda);
     wire sda_out = sda;
 
-    i2c_slave dut(sda, scl, rst, out);
+    i2c_slave dut(sda, scl, rst);
 
     reg[7:0] data;
     integer i;
@@ -36,6 +36,8 @@ module i2c_tb;
         #0.5 rst = 1'b0;
 
         WRITE_DATA(addr, 8'hAB, ack);
+
+        WRITE_DATA(addr, 8'hFF, ack);
 
         #10;
 
